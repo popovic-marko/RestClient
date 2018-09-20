@@ -87,26 +87,43 @@ public class EventServiceImpl implements ApiService {
         JsonObject result = gson.fromJson(response, JsonObject.class);
         JsonArray array = result.getAsJsonArray("events");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         for (JsonElement element : array) {
             JsonObject obj = (JsonObject) element;
 
-            String id = obj.get("id").getAsString();
-            String name = obj.get("name").getAsString();
+            String id = (obj.get("id") != null) ? obj.get("id").getAsString() : "N/A";
+            String name = (obj.get("name") != null) ? obj.get("name").getAsString() : "N/A";
 
-            String date = obj.get("local_date").getAsString();
-            String time = obj.get("local_time").getAsString();
-            String localDateTimeString = date + " " + time;
-            LocalDateTime dateTime = LocalDateTime.parse(localDateTimeString, formatter);
+            LocalDateTime dateTime = LocalDateTime.now();
+            if((obj.get("local_date") != null) && (obj.get("local_time") != null) ) {
+                String date = obj.get("local_date").getAsString();
+                String time = obj.get("local_time").getAsString();
+                String localDateTimeString = date + " " + time;
+                dateTime = LocalDateTime.parse(localDateTimeString, formatter);
+            }
 
-            String link = obj.get("link").getAsString();
-            String description = obj.get("description").getAsString();
+            String link = (obj.get("link") != null) ? obj.get("link").getAsString() : "N/A";
+            String description = (obj.get("description") != null) ? obj.get("description").getAsString() : "N/A";
             description = Jsoup.parse(description).text();
-            String venueName = obj.get("venue").getAsJsonObject().get("name").getAsString();
-            String venueStreet = obj.get("venue").getAsJsonObject().get("address_1").getAsString();
-            String venueCity = obj.get("venue").getAsJsonObject().get("city").getAsString();
-            String groupName = obj.get("group").getAsJsonObject().get("name").getAsString();
+            
+            String venueName = "N/A";
+            String venueStreet = "N/A";
+            String venueCity = "N/A";
+            if(obj.get("venue")!= null) {
+                venueName = (obj.get("venue").getAsJsonObject().get("name") != null) ?
+                        obj.get("venue").getAsJsonObject().get("name").getAsString() : venueName;
+                venueStreet = (obj.get("venue").getAsJsonObject().get("address_1") != null) ? 
+                        obj.get("venue").getAsJsonObject().get("address_1").getAsString() : venueStreet;
+                venueCity = (obj.get("venue").getAsJsonObject().get("city") != null) ?
+                        obj.get("venue").getAsJsonObject().get("city").getAsString(): venueCity;
+            }
+
+            String groupName = "N/A";
+            if(obj.get("group") != null) {
+                groupName = (obj.get("group").getAsJsonObject().get("name") != null) ?
+                    obj.get("group").getAsJsonObject().get("name").getAsString() : groupName;    
+            }
 
             Event event = new Event(id, name, dateTime, link, description, venueName, venueStreet, venueCity, groupName);
             events.add(event);

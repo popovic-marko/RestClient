@@ -1,5 +1,11 @@
 package com.rest.client.main;
 
+import com.rest.client.domain.City;
+import com.rest.client.injector.ApiServiceInjector;
+import com.rest.client.injector.impl.CityServiceInjector;
+import com.rest.client.injector.impl.EventServiceInjector;
+import com.rest.client.service.ServiceConsumer;
+import com.rest.client.util.Session;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,19 +26,29 @@ public class Start {
     }
     
     public static void runApp() throws IOException {
-        
+        ApiServiceInjector injector = null;
+        ServiceConsumer consumer = null;
         boolean end = false;
         
         while(!end) {
             System.out.println("Ucitavanje gradova ...");
-            //showCities();
+            
+            injector = new CityServiceInjector();
+            consumer = injector.getConsumer();
+            consumer.showElements();
+            
             System.out.println("Unesite redni broj grada za prikaz (za kraj rada unesite -1):");
             int number = Start.readInputNumber();
             if(number == -1) {
                 end = true;
             } else {
-                // City city = getObjectByKey(number);
-                // showEvents(city.getLon, city.getLat);
+                City city = (City) consumer.getElementByIndex(number);
+                Session.getInstace().getMap().put("currentCity", city);
+                
+                injector = new EventServiceInjector();
+                consumer = injector.getConsumer();
+                consumer.showElements();
+                
                 number = Start.readInputNumber();
                 if(number == -1) {
                     end = true;

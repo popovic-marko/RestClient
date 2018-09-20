@@ -24,6 +24,10 @@ public class CityServiceImpl implements ApiService {
 
     List<City> cities;
 
+    public CityServiceImpl() {
+        cities = new ArrayList<>();
+    }
+
     @Override
     public void showElements() {
         try {
@@ -32,10 +36,10 @@ public class CityServiceImpl implements ApiService {
             WebTarget webTarget = client.target(targetUrl);
             
             String response = webTarget.request(MediaType.APPLICATION_JSON).get(String.class);
-            List<City> cities = parseJsonResult(response);
+            cities = parseJsonResult(response);
             
             for (int i = 0; i < cities.size(); i++) {
-                System.out.println("\t" + i + 1 + ". " + cities.get(i).getName());
+                System.out.println("\t" + (i+1) + ". " + cities.get(i).getName());
             }
         } catch (IOException ex) {
             System.out.println("Greska prilikom ucitavanja podataka iz fajla:"
@@ -62,7 +66,7 @@ public class CityServiceImpl implements ApiService {
     }
 
     private List<City> parseJsonResult(String response) {
-        List<City> cities = new ArrayList<>();
+        List<City> resList = new ArrayList<>();
         Gson gson = new GsonBuilder().create();
         
         JsonObject result = gson.fromJson(response, JsonObject.class);
@@ -77,9 +81,9 @@ public class CityServiceImpl implements ApiService {
             double lat = obj.get("lat").getAsDouble();
 
             City city = new City(id, name, lon, lat);
-            cities.add(city);
+            resList.add(city);
         }
         
-        return cities;
+        return resList;
     }
 }

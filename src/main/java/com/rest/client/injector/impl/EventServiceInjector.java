@@ -1,5 +1,6 @@
-package com.rest.client.injector;
+package com.rest.client.injector.impl;
 
+import com.rest.client.injector.ApiServiceInjector;
 import com.rest.client.service.ServiceConsumer;
 import com.rest.client.service.impl.EventServiceImpl;
 import com.rest.client.service.impl.ServiceConsumerImpl;
