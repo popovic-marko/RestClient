@@ -7,9 +7,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.rest.client.domain.City;
 import com.rest.client.service.ApiService;
+import com.rest.client.util.ApiClient;
 import com.rest.client.util.AppResources;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -31,7 +31,7 @@ public class CityServiceImpl implements ApiService {
     @Override
     public void showElements() {
         try {
-            Client client = ClientBuilder.newClient();
+            Client client = ApiClient.getInstance().getClient();
             String targetUrl = prepareUrl();
             WebTarget webTarget = client.target(targetUrl);
             
@@ -49,6 +49,10 @@ public class CityServiceImpl implements ApiService {
 
     @Override
     public Object getElementByIndex(int index) {
+        if(index < 0 || index >= cities.size()) {
+            return null;
+        }
+        
         return cities.get(index);
     }
 
@@ -74,10 +78,10 @@ public class CityServiceImpl implements ApiService {
         for (JsonElement element : array) {
             JsonObject obj = (JsonObject) element;
 
-            int id = obj.get("id").getAsInt();
-            String name = obj.get("city").getAsString();
-            double lon = obj.get("lon").getAsDouble();
-            double lat = obj.get("lat").getAsDouble();
+            int id = (obj.get("id") == null) ? obj.get("id").getAsInt() : -1;
+            String name = (obj.get("city") == null) ? obj.get("city").getAsString() : "N/A";
+            double lon = (obj.get("lon") == null) ? obj.get("lon").getAsDouble() : -1;
+            double lat = (obj.get("lat") == null) ? obj.get("lat").getAsDouble() : -1;
 
             City city = new City(id, name, lon, lat);
             cities.add(city);

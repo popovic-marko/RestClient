@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.rest.client.domain.City;
 import com.rest.client.domain.Event;
 import com.rest.client.service.ApiService;
+import com.rest.client.util.ApiClient;
 import com.rest.client.util.AppResources;
 import com.rest.client.util.Session;
 import java.io.IOException;
@@ -36,26 +37,31 @@ public class EventServiceImpl implements ApiService {
     @Override
     public void showElements() {
         try {
-            Client client = ClientBuilder.newClient();
+            Client client = ApiClient.getInstance().getClient();
             String targetUrl = prepareUrl();
             WebTarget webTarget = client.target(targetUrl);
 
             String response = webTarget.request(MediaType.APPLICATION_JSON).get(String.class);
             parseJsonResult(response);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
-
-            for (int i = 0; i < events.size(); i++) {
-                Event event = events.get(i);
-                System.out.println("Dogadjaj:" + event.getName());
-                System.out.println("\t Vreme odrzavanja: " + event.getDateTime().format(formatter));
-                System.out.println("\t Link: " + event.getLink());
-                System.out.println("\t Opis: " + event.getDescription());
-                System.out.println("\t Mesto odrzavanja: " + event.getVenueName());
-                System.out.println("\t Ulica: " + event.getVenueStreet());
-                System.out.println("\t Grad: " + event.getVenueCity());
-                System.out.println("\t Organizator: " + event.getGroupName());
+            if(events.isEmpty()) {
                 System.out.println("-----------------------------------------");
+                System.out.println("Trenutno nema predstojecih dogadjaja za izabrani grad.");
+                System.out.println("-----------------------------------------\n");
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+                for (int i = 0; i < events.size(); i++) {
+                    Event event = events.get(i);
+                    System.out.println("Dogadjaj:" + event.getName());
+                    System.out.println("\t Vreme odrzavanja: " + event.getDateTime().format(formatter));
+                    System.out.println("\t Link: " + event.getLink());
+                    System.out.println("\t Opis: " + event.getDescription());
+                    System.out.println("\t Mesto odrzavanja: " + event.getVenueName());
+                    System.out.println("\t Ulica: " + event.getVenueStreet());
+                    System.out.println("\t Grad: " + event.getVenueCity());
+                    System.out.println("\t Organizator: " + event.getGroupName());
+                    System.out.println("-----------------------------------------");
+                }
             }
         } catch (IOException ex) {
             System.out.println("Greska prilikom ucitavanja podataka iz fajla:"
@@ -65,6 +71,10 @@ public class EventServiceImpl implements ApiService {
 
     @Override
     public Object getElementByIndex(int index) {
+        if(index < 0 || index > events.size()) {
+            return null;
+        }
+        
         return events.get(index);
     }
 
