@@ -29,6 +29,10 @@ public class EventServiceImpl implements ApiService {
 
     List<Event> events;
 
+    public EventServiceImpl(List events) {
+        this.events = events;
+    }
+    
     @Override
     public void showElements() {
         try {
@@ -37,7 +41,7 @@ public class EventServiceImpl implements ApiService {
             WebTarget webTarget = client.target(targetUrl);
 
             String response = webTarget.request(MediaType.APPLICATION_JSON).get(String.class);
-            List<Event> events = parseJsonResult(response);
+            parseJsonResult(response);
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
 
@@ -49,6 +53,7 @@ public class EventServiceImpl implements ApiService {
                 System.out.println("\t Opis: " + event.getDescription());
                 System.out.println("\t Mesto odrzavanja: " + event.getVenueName());
                 System.out.println("\t Ulica: " + event.getVenueStreet());
+                System.out.println("\t Grad: " + event.getVenueCity());
                 System.out.println("\t Organizator: " + event.getGroupName());
                 System.out.println("-----------------------------------------");
             }
@@ -80,8 +85,7 @@ public class EventServiceImpl implements ApiService {
         return eventsUrl;
     }
 
-    private List<Event> parseJsonResult(String response) {
-        List<Event> events = new ArrayList<>();
+    private void parseJsonResult(String response) {
         Gson gson = new GsonBuilder().create();
 
         JsonObject result = gson.fromJson(response, JsonObject.class);
@@ -128,7 +132,5 @@ public class EventServiceImpl implements ApiService {
             Event event = new Event(id, name, dateTime, link, description, venueName, venueStreet, venueCity, groupName);
             events.add(event);
         }
-
-        return events;
     }
 }

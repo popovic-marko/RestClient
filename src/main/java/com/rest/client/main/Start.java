@@ -42,7 +42,7 @@ public class Start {
             if(number == -1) {
                 end = true;
             } else {
-                City city = (City) consumer.getElementByIndex(number);
+                City city = (City) consumer.getElementByIndex(number-1);
                 Session.getInstace().getMap().put("currentCity", city);
                 
                 injector = new EventServiceInjector();

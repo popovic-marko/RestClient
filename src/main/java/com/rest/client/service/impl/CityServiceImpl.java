@@ -24,8 +24,8 @@ public class CityServiceImpl implements ApiService {
 
     List<City> cities;
 
-    public CityServiceImpl() {
-        cities = new ArrayList<>();
+    public CityServiceImpl(List cities) {
+        this.cities = cities;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CityServiceImpl implements ApiService {
             WebTarget webTarget = client.target(targetUrl);
             
             String response = webTarget.request(MediaType.APPLICATION_JSON).get(String.class);
-            cities = parseJsonResult(response);
+            parseJsonResult(response);
             
             for (int i = 0; i < cities.size(); i++) {
                 System.out.println("\t" + (i+1) + ". " + cities.get(i).getName());
@@ -65,8 +65,7 @@ public class CityServiceImpl implements ApiService {
         return citiesUrl;
     }
 
-    private List<City> parseJsonResult(String response) {
-        List<City> resList = new ArrayList<>();
+    private void parseJsonResult(String response) {
         Gson gson = new GsonBuilder().create();
         
         JsonObject result = gson.fromJson(response, JsonObject.class);
@@ -81,9 +80,7 @@ public class CityServiceImpl implements ApiService {
             double lat = obj.get("lat").getAsDouble();
 
             City city = new City(id, name, lon, lat);
-            resList.add(city);
+            cities.add(city);
         }
-        
-        return resList;
     }
 }
