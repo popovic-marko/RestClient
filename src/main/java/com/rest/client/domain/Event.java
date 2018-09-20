@@ -14,9 +14,10 @@ public class Event {
     private String description;
     private String venueName;
     private String venueStreet;
+    private String venueCity;
     private String groupName;
 
-    public Event(String id, String name, LocalDateTime dateTime, String link, String description, String venueName, String venueStreet, String groupName) {
+    public Event(String id, String name, LocalDateTime dateTime, String link, String description, String venueName, String venueStreet, String venueCity, String groupName) {
         this.id = id;
         this.name = name;
         this.dateTime = dateTime;
@@ -24,6 +25,7 @@ public class Event {
         this.description = description;
         this.venueName = venueName;
         this.venueStreet = venueStreet;
+        this.venueCity = venueCity;
         this.groupName = groupName;
     }
 
@@ -91,5 +93,12 @@ public class Event {
         this.venueStreet = venueStreet;
     }
     
+    public String getVenueCity() {
+        return venueCity;
+    }
+
+    public void setVenueCity(String venueCity) {
+        this.venueCity = venueCity;
+    }
     
 }
