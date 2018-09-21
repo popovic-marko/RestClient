@@ -33,7 +33,7 @@ public class EventServiceImpl implements ApiService {
     }
     
     @Override
-    public void showElements() {
+    public boolean showElements() {
         try {
             Client client = ApiClient.getInstance().getClient();
             String targetUrl = prepareUrl();
@@ -61,9 +61,11 @@ public class EventServiceImpl implements ApiService {
                     System.out.println("-----------------------------------------");
                 }
             }
+            return true;
         } catch (IOException ex) {
             System.out.println("Greska prilikom ucitavanja podataka iz fajla:"
                     + ex.getMessage());
+            return false;
         }
     }
 

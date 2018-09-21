@@ -28,7 +28,7 @@ public class CityServiceImpl implements ApiService {
     }
 
     @Override
-    public void showElements() {
+    public boolean showElements() {
         try {
             Client client = ApiClient.getInstance().getClient();
             String targetUrl = prepareUrl();
@@ -40,9 +40,10 @@ public class CityServiceImpl implements ApiService {
             for (int i = 0; i < cities.size(); i++) {
                 System.out.println("\t" + (i+1) + ". " + cities.get(i).getName());
             }
+            return true;
         } catch (IOException ex) {
-            System.out.println("Greska prilikom ucitavanja podataka iz fajla:"
-                    + ex.getMessage());
+            System.out.println("Greska prilikom ucitavanja podataka iz fajla:");
+            return false;
         }
     }
 
@@ -77,10 +78,10 @@ public class CityServiceImpl implements ApiService {
         for (JsonElement element : array) {
             JsonObject obj = (JsonObject) element;
 
-            int id = (obj.get("id") == null) ? obj.get("id").getAsInt() : -1;
-            String name = (obj.get("city") == null) ? obj.get("city").getAsString() : "N/A";
-            double lon = (obj.get("lon") == null) ? obj.get("lon").getAsDouble() : -1;
-            double lat = (obj.get("lat") == null) ? obj.get("lat").getAsDouble() : -1;
+            int id = (obj.get("id") != null) ? obj.get("id").getAsInt() : -1;
+            String name = (obj.get("city") != null) ? obj.get("city").getAsString() : "N/A";
+            double lon = (obj.get("lon") != null) ? obj.get("lon").getAsDouble() : -1;
+            double lat = (obj.get("lat") != null) ? obj.get("lat").getAsDouble() : -1;
 
             City city = new City(id, name, lon, lat);
             cities.add(city);

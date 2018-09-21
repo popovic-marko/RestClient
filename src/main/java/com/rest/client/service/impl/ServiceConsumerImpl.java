@@ -15,8 +15,8 @@ public class ServiceConsumerImpl implements ServiceConsumer{
     }
     
     @Override
-    public void showElements() {
-        this.service.showElements();
+    public boolean showElements() {
+        return this.service.showElements();
     }
 
     @Override

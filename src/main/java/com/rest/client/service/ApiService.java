@@ -6,7 +6,7 @@ package com.rest.client.service;
  */
 public interface ApiService {
     
-    void showElements();
+    boolean showElements();
     
     Object getElementByIndex(int index);
 }

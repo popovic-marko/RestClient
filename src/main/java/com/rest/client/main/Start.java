@@ -27,6 +27,7 @@ public class Start {
         ApiServiceInjector injector = null;
         ServiceConsumer consumer = null;
         boolean end = false;
+        boolean res;
         int number;
         
         while (!end) {
@@ -34,8 +35,10 @@ public class Start {
 
             injector = new CityServiceInjector();
             consumer = injector.getConsumer();
-            consumer.showElements();
-
+            res = consumer.showElements();
+            if(!res)
+                return;
+            
             System.out.println("Unesite redni broj grada za prikaz dogadjaja:");
             City city = null;
             while(city == null) {
@@ -48,8 +51,10 @@ public class Start {
 
             injector = new EventServiceInjector();
             consumer = injector.getConsumer();
-            consumer.showElements();
-
+            res = consumer.showElements();
+            if(!res)
+                return;
+            
             System.out.println("Za kraj rada unesite -1, za prikaz svih gradova bilo koji broj:");
             number = Helper.readInputNumber();
             if (number == -1) {
