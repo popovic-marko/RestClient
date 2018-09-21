@@ -8,7 +8,7 @@ import javax.ws.rs.client.ClientBuilder;
  * @author Marko Popovic
  */
 public class ApiClient {
-    private Client client;
+    private final Client client;
     private static ApiClient instance;
 
     private ApiClient() {

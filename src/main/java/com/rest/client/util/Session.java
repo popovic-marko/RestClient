@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Marko Popovic
  */
 public class Session {
-    private Map<String, Object> map;
+    private final Map<String, Object> map;
     private static Session instance;
     
     private Session() {

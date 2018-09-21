@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
  * @author Marko Popovic
  */
 public class InputReader {
-    private BufferedReader in;
+    private final BufferedReader in;
     private static InputReader instance;
     
     private InputReader() {
